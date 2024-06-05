@@ -9,12 +9,25 @@ html(lang="en")
         header
             h1 it works
         main
-            form#nickname-form
-                input(type="text", placeholder="choose a nickname", required)
-                button Save
-            ul
-            form#message-form
-                input(type="text", placeholder="write your message", required)
-                button send
+            div#name 
+                
+                form
+                    input(placeholder="nickname", type="text", required)
+                    button Send
+
+            div#join-room
+                form
+                    input(placeholder="room name", type="text", required)
+                    button Join
+                h4 Open rooms: 
+                ul 
+           
+            div#room
+                h3
+                ul 
+                form
+                    input(placeholder="massage", type="text", required)
+                    button Send
+        script(src = "/socket.io/socket.io.js")
         script(type="module", src="../public/js/app.js")
-        script (src = "../public/js/app.j")
+
