@@ -20,12 +20,30 @@ const wss = new WebSocket.Server({ server });
 const sockets = [];
 
 wss.on("connection", (socket) => {
+  console.log("New WebSocket connection established. ✔");
   sockets.push(socket);
+  socket["nickname"] = "Anonymous";
   socket.send("Welcome to the server!");
-  socket.onclose = console.log("WebSocket connection closed. ❌");
-  socket.onmessage = (message) => {
-    sockets.forEach((aSocket) => aSocket.send(message.data));
-  };
+
+  socket.on("close", () => {
+    console.log("WebSocket connection closed. ❌");
+  });
+  socket.on("message", (message) => {
+    const persed = JSON.parse(message);
+    switch (persed.type) {
+      case "nickname":
+        socket["nickname"] = persed.payload;
+        break;
+      case "msg":
+        sockets.forEach((aSocket) =>
+          aSocket.send(`${socket.nickname}: ${persed.payload}`)
+        );
+        break;
+    }
+  });
+  socket.on("error", (error) => {
+    console.error("WebSocket error:", error);
+  });
 });
 
 server.listen(3000, () =>

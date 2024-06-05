@@ -1,8 +1,13 @@
 const messageList = document.querySelector("ul");
-const messageForm = document.querySelector("form");
+const messageForm = document.querySelector("#message-form");
+const nicknameForm = document.querySelector("#nickname-form");
 
 const socket = new WebSocket(`ws://${window.location.host}`);
 
+function makeMassage(type, payload) {
+  const message = { type, payload };
+  return JSON.stringify(message);
+}
 socket.onopen = () => {
   console.log("WebSocket connection established. ✔");
 };
@@ -16,16 +21,21 @@ socket.onerror = (error) => {
 };
 
 socket.onmessage = (message) => {
-  console.log("WebSocket message received:", message.data);
+  const li = document.createElement("li");
+  li.innerText = message.data;
+  messageList.append(li);
 };
-
-setTimeout(() => {
-  socket.send("Hello, server!");
-}, 1000);
 
 messageForm.addEventListener("submit", (e) => {
   e.preventDefault();
   const input = messageForm.querySelector("input");
-  socket.send(input.value);
+  socket.send(makeMassage("msg", input.value));
+  input.value = "";
+});
+
+nicknameForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const input = nicknameForm.querySelector("input");
+  socket.send(makeMassage("nickname", input.value));
   input.value = "";
 });
