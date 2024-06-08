@@ -9,7 +9,18 @@ html(lang="en")
         header
             h1 it works
         main
-            video#myFace(autoplay, playsinline, width="400", height="400") 
+            div#welcome
+                form
+                    input(type="text", required, placeholder="room name")
+                    button Join
+            div#call
+                div#myStream 
+                    video#myFace(autoplay, playsinline, width="400", height="400") 
+                    button#mute mute
+                    button#camera turn camera off
+                    select#cameras
+                    video#peersFace(autoplay, playsinline, width="400", height="400") 
+
         script(src = "/socket.io/socket.io.js")
         script(type="module", src="../public/js/app.js")
 
